@@ -18,14 +18,18 @@ const ShopStack = createStackNavigator();
 export default function MainNavigator() {
   return (
     <LoadAssets {...{ fonts }}>
-      <StatusBar style="dark" />
+      <StatusBar animated />
       <ShopStack.Navigator
         screenOptions={{
           headerStyle: {
             backgroundColor: Platform.OS === "android" ? Colors.primary : "",
           },
           headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
-          headerTitle: "All products",
+          headerTitle: "Products",
+          headerTitleStyle: {
+            fontFamily: "bold",
+            fontSize: 24,
+          },
         }}
       >
         <ShopStack.Screen

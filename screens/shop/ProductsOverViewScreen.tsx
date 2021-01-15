@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { useSelector } from "react-redux";
+import { ProductItem } from "../../components";
 
 const ProductsOverViewScreen = () => {
   const products = useSelector(
@@ -9,11 +10,17 @@ const ProductsOverViewScreen = () => {
   return (
     <FlatList
       data={products}
-      renderItem={(itemDate: any) => <Text>{itemDate.item.title}</Text>}
+      renderItem={(itemDate: any) => (
+        <ProductItem
+          image={itemDate.item.imageUrl}
+          title={itemDate.item.title}
+          price={itemDate.item.price}
+          onViewDetail={() => {}}
+          onAddToCart={() => {}}
+        />
+      )}
     />
   );
 };
 
 export default ProductsOverViewScreen;
-
-const styles = StyleSheet.create({});
