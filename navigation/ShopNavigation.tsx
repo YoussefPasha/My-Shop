@@ -7,6 +7,7 @@ import ProductsOverViewScreen from "../screens/shop/ProductsOverViewScreen";
 
 import { LoadAssets } from "../components";
 import Colors from "../constants/Colors";
+import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -25,7 +26,6 @@ export default function MainNavigator() {
             backgroundColor: Platform.OS === "android" ? Colors.primary : "",
           },
           headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
-          headerTitle: "Products",
           headerTitleStyle: {
             fontFamily: "bold",
             fontSize: 24,
@@ -35,6 +35,13 @@ export default function MainNavigator() {
         <ShopStack.Screen
           name="ProductsOverview"
           component={ProductsOverViewScreen}
+          options={{
+            headerTitle: "Products",
+          }}
+        ></ShopStack.Screen>
+        <ShopStack.Screen
+          name="ProductDetail"
+          component={ProductDetailScreen}
         ></ShopStack.Screen>
       </ShopStack.Navigator>
     </LoadAssets>
