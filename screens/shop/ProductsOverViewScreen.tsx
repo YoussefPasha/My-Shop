@@ -11,7 +11,7 @@ const ProductsOverViewScreen = (props: any) => {
     (state: any) => state.products.availableProducts
   );
   const dispatch = useDispatch();
-  const { setOptions } = props.navigation;
+  const { setOptions, navigate } = props.navigation;
   useEffect(() => {
     setOptions({
       headerRight: () => (
@@ -19,12 +19,14 @@ const ProductsOverViewScreen = (props: any) => {
           <Item
             title="Cart"
             iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
-            onPress={() => {}}
+            onPress={() => {
+              navigate("Cart");
+            }}
           />
         </HeaderButtons>
       ),
     });
-  }, [setOptions]);
+  }, [setOptions, navigate]);
   return (
     <FlatList
       data={products}

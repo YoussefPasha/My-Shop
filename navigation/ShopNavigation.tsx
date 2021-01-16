@@ -8,6 +8,7 @@ import ProductsOverViewScreen from "../screens/shop/ProductsOverViewScreen";
 import { LoadAssets } from "../components";
 import Colors from "../constants/Colors";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
+import CartScreen from "../screens/shop/CartScreen";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -43,6 +44,7 @@ export default function MainNavigator() {
           name="ProductDetail"
           component={ProductDetailScreen}
         ></ShopStack.Screen>
+        <ShopStack.Screen name="Cart" component={CartScreen}></ShopStack.Screen>
       </ShopStack.Navigator>
     </LoadAssets>
   );
