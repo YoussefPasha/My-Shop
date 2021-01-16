@@ -1,7 +1,9 @@
-import React from "react";
-import { FlatList } from "react-native";
+import React, { useEffect } from "react";
+import { FlatList, Platform } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { ProductItem } from "../../components";
+import { HeaderButtonCmp } from "../../components";
 import * as cartActions from "../../store/actions/cart";
 
 const ProductsOverViewScreen = (props: any) => {
@@ -9,6 +11,20 @@ const ProductsOverViewScreen = (props: any) => {
     (state: any) => state.products.availableProducts
   );
   const dispatch = useDispatch();
+  const { setOptions } = props.navigation;
+  useEffect(() => {
+    setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButtonCmp}>
+          <Item
+            title="Cart"
+            iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+            onPress={() => {}}
+          />
+        </HeaderButtons>
+      ),
+    });
+  }, [setOptions]);
   return (
     <FlatList
       data={products}
