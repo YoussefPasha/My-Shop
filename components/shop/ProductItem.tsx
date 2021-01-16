@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginVertical: 4,
-    fontFamily: "regular",
+    fontFamily: "bold",
   },
   price: {
     fontSize: 14,
