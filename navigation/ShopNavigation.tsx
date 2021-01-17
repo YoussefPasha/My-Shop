@@ -10,6 +10,7 @@ import Colors from "../constants/Colors";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
+import { Ionicons } from "@expo/vector-icons";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -77,8 +78,32 @@ const MainNavigator = () => {
           },
         }}
       >
-        <ShopDrawer.Screen name="Products" component={ProductNavigator} />
-        <ShopDrawer.Screen name="Orders" component={orderNavigatorCmp} />
+        <ShopDrawer.Screen
+          name="Products"
+          component={ProductNavigator}
+          options={{
+            drawerIcon: ({ color }: any) => (
+              <Ionicons
+                name={Platform.OS === "android" ? "md-list" : "ios-list"}
+                size={23}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <ShopDrawer.Screen
+          name="Orders"
+          component={orderNavigatorCmp}
+          options={{
+            drawerIcon: ({ color }: any) => (
+              <Ionicons
+                name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+                size={23}
+                color={color}
+              />
+            ),
+          }}
+        />
       </ShopDrawer.Navigator>
     </LoadAssets>
   );
