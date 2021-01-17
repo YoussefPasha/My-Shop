@@ -11,7 +11,7 @@ const ProductsOverViewScreen = (props: any) => {
     (state: any) => state.products.availableProducts
   );
   const dispatch = useDispatch();
-  const { setOptions, navigate } = props.navigation;
+  const { setOptions, navigate, toggleDrawer } = props.navigation;
   useEffect(() => {
     setOptions({
       headerRight: () => (
@@ -25,8 +25,19 @@ const ProductsOverViewScreen = (props: any) => {
           />
         </HeaderButtons>
       ),
+      headerLeft: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButtonCmp}>
+          <Item
+            title="Menu"
+            iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+            onPress={() => {
+              toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      ),
     });
-  }, [setOptions, navigate]);
+  }, [setOptions, navigate, toggleDrawer]);
   return (
     <FlatList
       data={products}

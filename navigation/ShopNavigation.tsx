@@ -68,7 +68,15 @@ const MainNavigator = () => {
   return (
     <LoadAssets {...{ fonts }}>
       <StatusBar animated />
-      <ShopDrawer.Navigator screenOptions={defaultScreenOptions}>
+      <ShopDrawer.Navigator
+        drawerContentOptions={{
+          activeTintColor: Colors.primary,
+          labelStyle: {
+            fontFamily: "bold",
+            fontSize: 16,
+          },
+        }}
+      >
         <ShopDrawer.Screen name="Products" component={ProductNavigator} />
         <ShopDrawer.Screen name="Orders" component={orderNavigatorCmp} />
       </ShopDrawer.Navigator>
