@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, Platform } from "react-native";
+import { Text, View, FlatList, Platform } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector } from "react-redux";
-import { HeaderButtonCmp } from "../../components";
-
-const styles = StyleSheet.create({});
+import { HeaderButtonCmp, OrderItem } from "../../components";
 
 const OrdersScreen = (props: any) => {
   const orders = useSelector((state: any) => state.orders.orders);
@@ -27,7 +25,12 @@ const OrdersScreen = (props: any) => {
   return (
     <FlatList
       data={orders}
-      renderItem={(itemData: any) => <Text>{itemData.item.totalAmount}</Text>}
+      renderItem={(itemData: any) => (
+        <OrderItem
+          amount={itemData.item.totalAmount}
+          date={itemData.item.readDate}
+        />
+      )}
     />
   );
 };
