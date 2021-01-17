@@ -11,6 +11,7 @@ import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import { Ionicons } from "@expo/vector-icons";
+import UserProductsScreen from "../screens/user/UserProductsScreen";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -19,6 +20,7 @@ const fonts = {
 
 const ShopStack = createStackNavigator();
 const OrderNavigator = createStackNavigator();
+const AdminNavigator = createStackNavigator();
 const ShopDrawer = createDrawerNavigator();
 
 const defaultScreenOptions = {
@@ -65,6 +67,19 @@ const orderNavigatorCmp = () => {
   );
 };
 
+const AdminNavigatorCmp = () => {
+  return (
+    <AdminNavigator.Navigator
+      screenOptions={{ ...defaultScreenOptions, headerTitle: "Your Products" }}
+    >
+      <AdminNavigator.Screen
+        name="UserProducts"
+        component={UserProductsScreen}
+      />
+    </AdminNavigator.Navigator>
+  );
+};
+
 const MainNavigator = () => {
   return (
     <LoadAssets {...{ fonts }}>
@@ -98,6 +113,19 @@ const MainNavigator = () => {
             drawerIcon: ({ color }: any) => (
               <Ionicons
                 name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+                size={23}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <ShopDrawer.Screen
+          name="Admin"
+          component={AdminNavigatorCmp}
+          options={{
+            drawerIcon: ({ color }: any) => (
+              <Ionicons
+                name={Platform.OS === "android" ? "md-create" : "ios-create"}
                 size={23}
                 color={color}
               />
