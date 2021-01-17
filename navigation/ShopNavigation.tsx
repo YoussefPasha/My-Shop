@@ -1,14 +1,15 @@
 import React from "react";
 import { Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StatusBar } from "expo-status-bar";
 
 import ProductsOverViewScreen from "../screens/shop/ProductsOverViewScreen";
-
 import { LoadAssets } from "../components";
 import Colors from "../constants/Colors";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
+import OrdersScreen from "../screens/shop/OrdersScreen";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -16,36 +17,63 @@ const fonts = {
 };
 
 const ShopStack = createStackNavigator();
+const OrderNavigator = createStackNavigator();
+const ShopDrawer = createDrawerNavigator();
 
-export default function MainNavigator() {
+const defaultScreenOptions = {
+  headerStyle: {
+    backgroundColor: Platform.OS === "android" ? Colors.primary : "",
+  },
+  headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
+  headerTitleStyle: {
+    fontFamily: "bold",
+    fontSize: 24,
+  },
+};
+
+const ProductNavigator = () => {
+  return (
+    <ShopStack.Navigator screenOptions={defaultScreenOptions}>
+      <ShopStack.Screen
+        name="ProductsOverview"
+        component={ProductsOverViewScreen}
+        options={{
+          headerTitle: "Products",
+        }}
+      ></ShopStack.Screen>
+      <ShopStack.Screen
+        name="ProductDetail"
+        component={ProductDetailScreen}
+      ></ShopStack.Screen>
+      <ShopStack.Screen
+        name="Cart"
+        component={CartScreen}
+        options={{ headerTitle: "Your Cart" }}
+      ></ShopStack.Screen>
+    </ShopStack.Navigator>
+  );
+};
+
+const orderNavigatorCmp = () => {
+  return (
+    <OrderNavigator.Navigator
+      screenOptions={{ ...defaultScreenOptions, headerTitle: "Your Orders" }}
+    >
+      <OrderNavigator.Screen name="Orders" component={OrdersScreen} />
+    </OrderNavigator.Navigator>
+  );
+};
+
+const MainNavigator = () => {
   return (
     <LoadAssets {...{ fonts }}>
       <StatusBar animated />
-      <ShopStack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: Platform.OS === "android" ? Colors.primary : "",
-          },
-          headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
-          headerTitleStyle: {
-            fontFamily: "bold",
-            fontSize: 24,
-          },
-        }}
-      >
-        <ShopStack.Screen
-          name="ProductsOverview"
-          component={ProductsOverViewScreen}
-          options={{
-            headerTitle: "Products",
-          }}
-        ></ShopStack.Screen>
-        <ShopStack.Screen
-          name="ProductDetail"
-          component={ProductDetailScreen}
-        ></ShopStack.Screen>
-        <ShopStack.Screen name="Cart" component={CartScreen}></ShopStack.Screen>
-      </ShopStack.Navigator>
+      <ShopDrawer.Navigator screenOptions={defaultScreenOptions}>
+        <ShopDrawer.Screen name="Products" component={ProductNavigator} />
+        <ShopDrawer.Screen name="Orders" component={orderNavigatorCmp} />
+      </ShopDrawer.Navigator>
     </LoadAssets>
   );
-}
+};
+
+export default MainNavigator;
