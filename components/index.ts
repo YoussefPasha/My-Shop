@@ -1,3 +1,3 @@
 export { ProductItem, CartItem, OrderItem } from "./shop";
-export { HeaderButtonCmp } from "./UI";
+export { HeaderButtonCmp, MainButton } from "./UI";
 export { LoadAssets } from "./LoadAssets";
