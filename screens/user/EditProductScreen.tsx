@@ -6,6 +6,7 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -50,6 +51,8 @@ const EditProductScreen = (props: any) => {
     editedProduct ? editedProduct.description : ""
   );
   const dispatch = useDispatch();
+
+  
 
   useEffect(() => {
     setOptions({

@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { CartItem, MainButton } from "../../components";
+import { Card, CartItem, MainButton } from "../../components";
 import Colors from "../../constants/Colors";
 import * as cartActions from "../../store/actions/cart";
 import * as orderActions from "../../store/actions/orders";
@@ -16,12 +16,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 20,
     padding: 10,
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
-    backgroundColor: "white",
   },
   summaryText: {
     fontFamily: "bold",
@@ -52,7 +46,7 @@ const CartScreen = (props: any) => {
   });
   return (
     <View style={styles.screen}>
-      <View style={styles.summary}>
+      <Card style={styles.summary}>
         <Text style={styles.summaryText}>
           Total:{" "}
           <Text style={styles.amount}>
@@ -67,7 +61,7 @@ const CartScreen = (props: any) => {
             dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
           }}
         />
-      </View>
+      </Card>
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.productId}
