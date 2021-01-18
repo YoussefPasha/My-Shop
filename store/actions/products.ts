@@ -9,7 +9,7 @@ export const createProduct = (
   title: string,
   description: string,
   imageUrl: string,
-  price: string
+  price: number
 ) => {
   return {
     type: CREATE_PRODUCT,

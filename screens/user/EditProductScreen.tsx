@@ -7,10 +7,11 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HeaderButtonCmp } from "../../components";
 import Colors from "../../constants/Colors";
+import * as productActions from "../../store/actions/products";
 
 const styles = StyleSheet.create({
   form: {
@@ -48,6 +49,7 @@ const EditProductScreen = (props: any) => {
   const [description, setDescription] = useState(
     editedProduct ? editedProduct.description : ""
   );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setOptions({
@@ -80,13 +82,33 @@ const EditProductScreen = (props: any) => {
             iconName={
               Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
             }
-            onPress={() => {}}
+            onPress={() => {
+              if (productId) {
+                dispatch(
+                  productActions.updateProduct(
+                    productId,
+                    title,
+                    description,
+                    imageUrl
+                  )
+                );
+              } else {
+                dispatch(
+                  productActions.createProduct(
+                    title,
+                    description,
+                    imageUrl,
+                    +price
+                  )
+                );
+              }
+            }}
             buttonStyle={{ fontSize: 30, fontFamily: "bold" }}
           />
         </HeaderButtons>
       ),
     });
-  });
+  }, [productId, productActions, title, description, imageUrl, price]);
 
   return (
     <ScrollView>
