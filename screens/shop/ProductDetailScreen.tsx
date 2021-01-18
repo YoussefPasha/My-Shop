@@ -1,16 +1,10 @@
 import React, { useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Image,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import * as cartActions from "../../store/actions/cart";
 import Colors from "../../constants/Colors";
+import { MainButton } from "../../components";
 
 const styles = StyleSheet.create({
   image: {
@@ -50,7 +44,7 @@ const ProductDetailScreen = (props: any) => {
     <ScrollView>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
       <View style={styles.actions}>
-        <Button
+        <MainButton
           color={Colors.primary}
           title="Add to Cart"
           onPress={() => {

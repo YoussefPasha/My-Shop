@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Button, FlatList, Platform } from "react-native";
+import { FlatList, Platform } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector } from "react-redux";
-import { HeaderButtonCmp, ProductItem } from "../../components";
+import { HeaderButtonCmp, MainButton, ProductItem } from "../../components";
 import Colors from "../../constants/Colors";
 
 const UserProductsScreen = (props: any) => {
@@ -34,8 +34,12 @@ const UserProductsScreen = (props: any) => {
           onViewDetail={() => {}}
           onAddToCart={() => {}}
         >
-          <Button color={Colors.primary} title="Edit" onPress={() => {}} />
-          <Button color={Colors.primary} title="Delete" onPress={() => {}} />
+          <MainButton color={Colors.primary} title="EDIT" onPress={() => {}} />
+          <MainButton
+            color={Colors.primary}
+            title="DELETE"
+            onPress={() => {}}
+          />
         </ProductItem>
       )}
     />

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Button, FlatList, Platform } from "react-native";
+import { FlatList, Platform } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
-import { ProductItem } from "../../components";
+import { MainButton, ProductItem } from "../../components";
 import { HeaderButtonCmp } from "../../components";
 import * as cartActions from "../../store/actions/cart";
 import Colors from "../../constants/Colors";
@@ -54,14 +54,14 @@ const ProductsOverViewScreen = (props: any) => {
           price={itemData.item.price}
           onSelect={() => selectHandler(itemData.item.id)}
         >
-          <Button
+          <MainButton
             color={Colors.primary}
-            title="view Details"
+            title="VIEW DETAILS"
             onPress={() => selectHandler(itemData.item.id)}
           />
-          <Button
+          <MainButton
             color={Colors.primary}
-            title="To cart"
+            title="ADD TO CART"
             onPress={() => {
               dispatch(cartActions.addToCart(itemData.item));
             }}

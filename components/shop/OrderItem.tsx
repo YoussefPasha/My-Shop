@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import CartItem from "./CartItem";
 import Colors from "../../constants/Colors";
+import { MainButton } from "../UI";
 
 const styles = StyleSheet.create({
   orderItem: {
@@ -45,9 +46,9 @@ const OrderItem = (props: any) => {
         <Text style={styles.totalAmount}>${props.amount.toFixed(2)}</Text>
         <Text style={styles.date}>{props.date}</Text>
       </View>
-      <Button
+      <MainButton
         color={showDetails ? Colors.accent : Colors.primary}
-        title={!showDetails ? "Show details" : "Hide Details"}
+        title={!showDetails ? "Show Details" : "Hide Details"}
         onPress={() => {
           setShowDetails(!showDetails);
         }}

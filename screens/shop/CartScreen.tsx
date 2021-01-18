@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList, Button } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { CartItem } from "../../components";
+import { CartItem, MainButton } from "../../components";
 import Colors from "../../constants/Colors";
 import * as cartActions from "../../store/actions/cart";
 import * as orderActions from "../../store/actions/orders";
@@ -57,7 +57,7 @@ const CartScreen = (props: any) => {
           Total:{" "}
           <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
         </Text>
-        <Button
+        <MainButton
           color={Colors.accent}
           title="Order Now"
           disabled={cartItems.length === 0}
