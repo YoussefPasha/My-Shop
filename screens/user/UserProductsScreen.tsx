@@ -29,7 +29,7 @@ const UserProductsScreen = (props: any) => {
             title="Add"
             iconName={Platform.OS === "android" ? "md-add" : "ios-add"}
             onPress={() => {
-              navigate("EditProduct");
+              navigate("EditProduct", { productId: "" });
             }}
             buttonStyle={{ fontSize: 30, fontFamily: "bold" }}
           />
