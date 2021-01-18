@@ -12,6 +12,7 @@ import CartScreen from "../screens/shop/CartScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
 import { Ionicons } from "@expo/vector-icons";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
+import EditProductScreen from "../screens/user/EditProductScreen";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -69,12 +70,16 @@ const orderNavigatorCmp = () => {
 
 const AdminNavigatorCmp = () => {
   return (
-    <AdminNavigator.Navigator
-      screenOptions={{ ...defaultScreenOptions, headerTitle: "Your Products" }}
-    >
+    <AdminNavigator.Navigator screenOptions={defaultScreenOptions}>
       <AdminNavigator.Screen
         name="UserProducts"
         component={UserProductsScreen}
+        options={{ headerTitle: "Your Products" }}
+      />
+      <AdminNavigator.Screen
+        name="EditProduct"
+        component={EditProductScreen}
+        options={{ headerTitle: "Add Product" }}
       />
     </AdminNavigator.Navigator>
   );

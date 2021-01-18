@@ -23,8 +23,23 @@ const UserProductsScreen = (props: any) => {
           />
         </HeaderButtons>
       ),
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButtonCmp}>
+          <Item
+            title="Add"
+            iconName={Platform.OS === "android" ? "md-add" : "ios-add"}
+            onPress={() => {
+              navigate("EditProduct");
+            }}
+            buttonStyle={{ fontSize: 30, fontFamily: "bold" }}
+          />
+        </HeaderButtons>
+      ),
     });
   }, [setOptions, toggleDrawer]);
+  const editProductHandler = (id: string) => {
+    navigate("EditProduct", { productId: id });
+  };
   return (
     <FlatList
       data={userProducts}
@@ -33,10 +48,17 @@ const UserProductsScreen = (props: any) => {
           image={itemData.item.imageUrl}
           title={itemData.item.title}
           price={itemData.item.price}
-          onViewDetail={() => {}}
-          onAddToCart={() => {}}
+          onSelect={() => {
+            editProductHandler(itemData.item.id);
+          }}
         >
-          <MainButton color={Colors.primary} title="EDIT" onPress={() => {}} />
+          <MainButton
+            color={Colors.primary}
+            title="EDIT"
+            onPress={() => {
+              editProductHandler(itemData.item.id);
+            }}
+          />
           <MainButton
             color={Colors.primary}
             title="DELETE"
