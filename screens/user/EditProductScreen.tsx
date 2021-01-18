@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+import { useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HeaderButtonCmp } from "../../components";
 import Colors from "../../constants/Colors";
@@ -32,7 +33,21 @@ const styles = StyleSheet.create({
 
 const EditProductScreen = (props: any) => {
   const productId = props.route.params.productId;
-  const { setOptions, navigate, toggleDrawer } = props.navigation;
+  let editedProduct: any;
+  if (productId) {
+    editedProduct = useSelector((state: any) =>
+      state.products.userProducts.find((prod: any) => prod.id === productId)
+    );
+  }
+  const { setOptions } = props.navigation;
+  const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
+  const [imageUrl, setImageUrl] = useState(
+    editedProduct ? editedProduct.imageUrl : ""
+  );
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState(
+    editedProduct ? editedProduct.description : ""
+  );
 
   useEffect(() => {
     setOptions({
@@ -78,19 +93,37 @@ const EditProductScreen = (props: any) => {
       <View style={styles.form}>
         <View style={styles.formControl}>
           <Text style={styles.label}>Title</Text>
-          <TextInput style={styles.input} />
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={(text: string) => setTitle(text)}
+          />
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
-          <TextInput style={styles.input} />
+          <TextInput
+            style={styles.input}
+            value={imageUrl}
+            onChangeText={(imageUrl: string) => setImageUrl(imageUrl)}
+          />
         </View>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Price </Text>
-          <TextInput style={styles.input} />
-        </View>
+        {editedProduct ? null : (
+          <View style={styles.formControl}>
+            <Text style={styles.label}>Price </Text>
+            <TextInput
+              style={styles.input}
+              value={price}
+              onChangeText={(price: string) => setPrice(price)}
+            />
+          </View>
+        )}
         <View style={styles.formControl}>
           <Text style={styles.label}>Description</Text>
-          <TextInput style={styles.input} />
+          <TextInput
+            style={styles.input}
+            value={description}
+            onChangeText={(description: string) => setDescription(description)}
+          />
         </View>
       </View>
     </ScrollView>
