@@ -17,11 +17,12 @@ import Colors from "../../constants/Colors";
 const ProductsOverViewScreen = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { setOptions, navigate, toggleDrawer, addListener } = props.navigation;
+
   const products = useSelector(
     (state: any) => state.products.availableProducts
   );
-  const dispatch = useDispatch();
-  const { setOptions, navigate, toggleDrawer } = props.navigation;
 
   const loadProducts = useCallback(async () => {
     setError(null);
@@ -33,6 +34,13 @@ const ProductsOverViewScreen = (props: any) => {
     }
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
+
+  useEffect(() => {
+    const willFocus = addListener("focus", loadProducts);
+    return () => {
+      willFocus.remove();
+    };
+  }, [loadProducts, addListener]);
 
   useEffect(() => {
     loadProducts();
