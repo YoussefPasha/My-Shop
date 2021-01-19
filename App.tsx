@@ -1,6 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 
 import productReducers from "./store/reducers/products";
 import MainNavigator from "./navigation/ShopNavigation";
@@ -13,7 +14,7 @@ const rootReducer = combineReducers({
   orders: orders,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default function App() {
   return (
