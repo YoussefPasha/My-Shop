@@ -1,12 +1,12 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
   Platform,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -156,55 +156,80 @@ const EditProductScreen = (props: any) => {
     });
   }, [productId, productActions, formState]);
 
-  const textChangeHandler = (inputIdentifier: string, text: any) => {
-    let isValid = false;
-    if (text.trim().length > 0) {
-      isValid = true;
-    }
-    dispatchFormState({
-      type: FORM_UPDATE,
-      value: text,
-      isValid,
-      input: inputIdentifier,
-    });
-  };
+  const inputChangeHandler = useCallback(
+    (inputIdentifier: string, inputValue: string, inputValidity: boolean) => {
+      dispatchFormState({
+        type: FORM_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <Input
-          keyboardType="default"
-          autoCapitalize="sentences"
-          autoCorrect
-          returnKeyType="next"
-          label="Title"
-          errorText="Please enter a valid title!"
-        />
-        <Input
-          keyboardType="default"
-          returnKeyType="next"
-          label="Image Url"
-          errorText="Please enter a valid image url!"
-        />
-        {editedProduct ? null : (
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={100}
+      style={{ flex: 1 }}
+    >
+      <ScrollView>
+        <View style={styles.form}>
           <Input
-            keyboardType="decimal-pad"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
             returnKeyType="next"
-            label="Price"
-            errorText="Please enter a valid price!"
+            label="Title"
+            errorText="Please enter a valid title!"
+            onInputChange={inputChangeHandler}
+            initialValue={editedProduct ? editedProduct.title : ""}
+            initiallyValid={!!editedProduct}
+            required
+            id="title"
           />
-        )}
-        <Input
-          keyboardType="default"
-          autoCapitalize="sentences"
-          autoCorrect
-          label="Description"
-          errorText="Please enter a valid description!"
-          multiline
-          numberOfLines={3}
-        />
-      </View>
-    </ScrollView>
+          <Input
+            id="imageUrl"
+            keyboardType="default"
+            returnKeyType="next"
+            label="Image Url"
+            onInputChange={inputChangeHandler}
+            errorText="Please enter a valid image url!"
+            initialValue={editedProduct ? editedProduct.imageUrl : ""}
+            required
+            initiallyValid={!!editedProduct}
+          />
+          {editedProduct ? null : (
+            <Input
+              id="price"
+              keyboardType="decimal-pad"
+              returnKeyType="next"
+              label="Price"
+              onInputChange={inputChangeHandler}
+              required
+              errorText="Please enter a valid price!"
+              min={0.1}
+            />
+          )}
+          <Input
+            id="description"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            label="Description"
+            onInputChange={inputChangeHandler}
+            errorText="Please enter a valid description!"
+            multiline
+            numberOfLines={3}
+            initialValue={editedProduct ? editedProduct.description : ""}
+            required
+            initiallyValid={!!editedProduct}
+            minLength={5}
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
