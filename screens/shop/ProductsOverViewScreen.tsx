@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { MainButton, ProductItem } from "../../components";
 import { HeaderButtonCmp } from "../../components";
 import * as cartActions from "../../store/actions/cart";
+import * as productsActions from "../../store/actions/products";
 import Colors from "../../constants/Colors";
 
 const ProductsOverViewScreen = (props: any) => {
@@ -14,6 +15,7 @@ const ProductsOverViewScreen = (props: any) => {
   const dispatch = useDispatch();
   const { setOptions, navigate, toggleDrawer } = props.navigation;
   useEffect(() => {
+    dispatch(productsActions.fetchProducts());
     setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButtonCmp}>
@@ -38,7 +40,7 @@ const ProductsOverViewScreen = (props: any) => {
         </HeaderButtons>
       ),
     });
-  }, [setOptions, navigate, toggleDrawer]);
+  }, [setOptions, navigate, toggleDrawer, dispatch]);
   const selectHandler = (id: string) => {
     props.navigation.navigate("ProductDetail", {
       productId: id,
