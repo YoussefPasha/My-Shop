@@ -1,5 +1,11 @@
-import React, { useEffect } from "react";
-import { FlatList, Platform } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  FlatList,
+  Platform,
+  ActivityIndicator,
+  View,
+  Text,
+} from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { MainButton, ProductItem } from "../../components";
@@ -9,13 +15,27 @@ import * as productsActions from "../../store/actions/products";
 import Colors from "../../constants/Colors";
 
 const ProductsOverViewScreen = (props: any) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const products = useSelector(
     (state: any) => state.products.availableProducts
   );
   const dispatch = useDispatch();
   const { setOptions, navigate, toggleDrawer } = props.navigation;
+
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(productsActions.fetchProducts());
+    } catch (error) {
+      setError(error.message);
+    }
+    setIsLoading(false);
+  }, [dispatch, setIsLoading, setError]);
+
   useEffect(() => {
-    dispatch(productsActions.fetchProducts());
+    loadProducts();
     setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButtonCmp}>
@@ -40,12 +60,46 @@ const ProductsOverViewScreen = (props: any) => {
         </HeaderButtons>
       ),
     });
-  }, [setOptions, navigate, toggleDrawer, dispatch]);
+  }, [setOptions, navigate, toggleDrawer, dispatch, loadProducts]);
   const selectHandler = (id: string) => {
     props.navigation.navigate("ProductDetail", {
       productId: id,
     });
   };
+
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 18, fontFamily: "regular", color: "red" }}>
+          An error occurred!
+        </Text>
+        <MainButton
+          color={Colors.primary}
+          title="Try again"
+          onPress={loadProducts}
+        />
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isLoading && products.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 18, fontFamily: "bold" }}>
+          No Products found. Maybe start adding some!
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={products}
