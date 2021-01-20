@@ -16,6 +16,7 @@ import Colors from "../../constants/Colors";
 
 const ProductsOverViewScreen = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const { setOptions, navigate, toggleDrawer, addListener } = props.navigation;
@@ -26,17 +27,19 @@ const ProductsOverViewScreen = (props: any) => {
 
   const loadProducts = useCallback(async () => {
     setError(null);
-    setIsLoading(true);
+    setIsRefreshing(true);
     try {
       await dispatch(productsActions.fetchProducts());
     } catch (error) {
       setError(error.message);
     }
-    setIsLoading(false);
+    setIsRefreshing(false);
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
+    setIsLoading(true);
     const willFocus = addListener("focus", loadProducts);
+    setIsLoading(false);
     return () => {
       willFocus.remove();
     };
@@ -110,6 +113,8 @@ const ProductsOverViewScreen = (props: any) => {
 
   return (
     <FlatList
+      onRefresh={loadProducts}
+      refreshing={isRefreshing}
       data={products}
       renderItem={(itemData: any) => (
         <ProductItem
