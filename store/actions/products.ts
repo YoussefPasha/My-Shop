@@ -37,12 +37,17 @@ export const fetchProducts = () => {
 
 export const deleteProduct = (productId: string) => {
   return async (dispatch: any) => {
-    await fetch(
+    const res = await fetch(
       `https://my-shop-f8710-default-rtdb.firebaseio.com/products/${productId}.json`,
       {
         method: "DELETE",
       }
     );
+    if (!res.ok) {
+      throw new Error("Something went wrong");
+    }
+    const resData = await res.json();
+
     dispatch({ type: DELETE_PRODUCT, pid: productId });
   };
 };
@@ -91,7 +96,7 @@ export const updateProduct = (
   imageUrl: string
 ) => {
   return async (dispatch: any) => {
-    await fetch(
+    const res = await fetch(
       `https://my-shop-f8710-default-rtdb.firebaseio.com/products/${id}.json`,
       {
         method: "PATCH",
@@ -105,6 +110,12 @@ export const updateProduct = (
         }),
       }
     );
+
+    if (!res.ok) {
+      throw new Error("Something went wrong");
+    }
+
+    const resData = await res.json();
 
     dispatch({
       type: UPDATE_PRODUCT,
