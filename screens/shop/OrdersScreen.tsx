@@ -1,12 +1,32 @@
-import React, { useEffect } from "react";
-import { Text, View, FlatList, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  FlatList,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtonCmp, OrderItem } from "../../components";
+import Colors from "../../constants/Colors";
+import * as ordersActions from "../../store/actions/orders";
 
 const OrdersScreen = (props: any) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const orders = useSelector((state: any) => state.orders.orders);
-  const { setOptions, navigate, toggleDrawer } = props.navigation;
+  const { setOptions, toggleDrawer } = props.navigation;
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setIsLoading(true);
+      await dispatch(ordersActions.fetchOrders());
+      setIsLoading(false);
+    };
+    fetchOrders();
+  }, [dispatch]);
+
   useEffect(() => {
     setOptions({
       headerLeft: () => (
@@ -22,6 +42,14 @@ const OrdersScreen = (props: any) => {
       ),
     });
   }, [setOptions, toggleDrawer]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
   return (
     <FlatList
       data={orders}
