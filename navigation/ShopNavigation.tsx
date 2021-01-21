@@ -13,6 +13,7 @@ import OrdersScreen from "../screens/shop/OrdersScreen";
 import { Ionicons } from "@expo/vector-icons";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
+import AuthScreen from "../screens/user/AuthScreen";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -85,59 +86,86 @@ const AdminNavigatorCmp = () => {
   );
 };
 
+const ShopNavigator = () => {
+  return (
+    <ShopDrawer.Navigator
+      drawerContentOptions={{
+        activeTintColor: Colors.primary,
+        labelStyle: {
+          fontFamily: "bold",
+          fontSize: 16,
+        },
+      }}
+    >
+      <ShopDrawer.Screen
+        name="Products"
+        component={ProductNavigator}
+        options={{
+          drawerIcon: ({ color }: any) => (
+            <Ionicons
+              name={Platform.OS === "android" ? "md-list" : "ios-list"}
+              size={23}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <ShopDrawer.Screen
+        name="Orders"
+        component={orderNavigatorCmp}
+        options={{
+          drawerIcon: ({ color }: any) => (
+            <Ionicons
+              name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+              size={23}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <ShopDrawer.Screen
+        name="Admin"
+        component={AdminNavigatorCmp}
+        options={{
+          drawerIcon: ({ color }: any) => (
+            <Ionicons
+              name={Platform.OS === "android" ? "md-create" : "ios-create"}
+              size={23}
+              color={color}
+            />
+          ),
+        }}
+      />
+    </ShopDrawer.Navigator>
+  );
+};
+
+// const AuthStackNavigator = createStackNavigator();
+
+// const AuthNavigator = () => {
+//   return (
+//     <AuthStackNavigator.Navigator
+//       screenOptions={{ ...defaultScreenOptions, headerTitle: "Log In" }}
+//     >
+//       <AuthStackNavigator.Screen name="Auth" component={AuthScreen} />
+//     </AuthStackNavigator.Navigator>
+//   );
+// };
+
+const MainStackNavigator = createStackNavigator();
+
 const MainNavigator = () => {
   return (
     <LoadAssets {...{ fonts }}>
       <StatusBar animated />
-      <ShopDrawer.Navigator
-        drawerContentOptions={{
-          activeTintColor: Colors.primary,
-          labelStyle: {
-            fontFamily: "bold",
-            fontSize: 16,
-          },
-        }}
-      >
-        <ShopDrawer.Screen
-          name="Products"
-          component={ProductNavigator}
-          options={{
-            drawerIcon: ({ color }: any) => (
-              <Ionicons
-                name={Platform.OS === "android" ? "md-list" : "ios-list"}
-                size={23}
-                color={color}
-              />
-            ),
-          }}
+      <MainStackNavigator.Navigator screenOptions={{ ...defaultScreenOptions }}>
+        <MainStackNavigator.Screen
+          name={"Auth"}
+          component={AuthScreen}
+          options={{ headerTitle: "Authenticate" }}
         />
-        <ShopDrawer.Screen
-          name="Orders"
-          component={orderNavigatorCmp}
-          options={{
-            drawerIcon: ({ color }: any) => (
-              <Ionicons
-                name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
-                size={23}
-                color={color}
-              />
-            ),
-          }}
-        />
-        <ShopDrawer.Screen
-          name="Admin"
-          component={AdminNavigatorCmp}
-          options={{
-            drawerIcon: ({ color }: any) => (
-              <Ionicons
-                name={Platform.OS === "android" ? "md-create" : "ios-create"}
-                size={23}
-                color={color}
-              />
-            ),
-          }}
-        />
-      </ShopDrawer.Navigator>
+        <MainStackNavigator.Screen name={"Shop"} component={ShopNavigator} />
+      </MainStackNavigator.Navigator>
     </LoadAssets>
   );
 };
