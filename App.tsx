@@ -7,11 +7,13 @@ import productReducers from "./store/reducers/products";
 import MainNavigator from "./navigation/ShopNavigation";
 import cartReducer from "./store/reducers/cart";
 import orders from "./store/reducers/orders";
+import auth from "./store/reducers/auth";
 
 const rootReducer = combineReducers({
   products: productReducers,
   cart: cartReducer,
   orders: orders,
+  auth,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

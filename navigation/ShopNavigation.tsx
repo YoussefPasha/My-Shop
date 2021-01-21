@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
 import AuthScreen from "../screens/user/AuthScreen";
+import { useSelector } from "react-redux";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -140,32 +141,30 @@ const ShopNavigator = () => {
   );
 };
 
-// const AuthStackNavigator = createStackNavigator();
-
-// const AuthNavigator = () => {
-//   return (
-//     <AuthStackNavigator.Navigator
-//       screenOptions={{ ...defaultScreenOptions, headerTitle: "Log In" }}
-//     >
-//       <AuthStackNavigator.Screen name="Auth" component={AuthScreen} />
-//     </AuthStackNavigator.Navigator>
-//   );
-// };
-
 const MainStackNavigator = createStackNavigator();
 
 const MainNavigator = () => {
+  const userState = useSelector((state: any) => state.auth.token);
   return (
     <LoadAssets {...{ fonts }}>
       <StatusBar animated />
-      <MainStackNavigator.Navigator screenOptions={{ ...defaultScreenOptions }}>
-        <MainStackNavigator.Screen
-          name={"Auth"}
-          component={AuthScreen}
-          options={{ headerTitle: "Authenticate" }}
-        />
-        <MainStackNavigator.Screen name={"Shop"} component={ShopNavigator} />
-      </MainStackNavigator.Navigator>
+      {!userState ? (
+        <MainStackNavigator.Navigator
+          screenOptions={{ ...defaultScreenOptions }}
+        >
+          <MainStackNavigator.Screen
+            name={"Auth"}
+            component={AuthScreen}
+            options={{
+              headerTitle: "Authenticate",
+            }}
+          />
+        </MainStackNavigator.Navigator>
+      ) : (
+        <MainStackNavigator.Navigator screenOptions={{ headerShown: false }}>
+          <MainStackNavigator.Screen name={"Shop"} component={ShopNavigator} />
+        </MainStackNavigator.Navigator>
+      )}
     </LoadAssets>
   );
 };

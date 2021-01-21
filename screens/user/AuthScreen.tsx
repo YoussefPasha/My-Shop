@@ -61,6 +61,7 @@ const AuthScreen = (props: any) => {
   const [error, setError] = useState("");
   const [isSignup, setIsSignup] = useState(false);
   const dispatch = useDispatch();
+  const { navigate } = props.navigation;
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: "",
@@ -109,6 +110,7 @@ const AuthScreen = (props: any) => {
           )
         );
       }
+      navigate("Shop");
       setError("");
     } catch (error) {
       setError(error.message);
