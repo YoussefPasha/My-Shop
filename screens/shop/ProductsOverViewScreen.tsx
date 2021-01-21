@@ -16,6 +16,7 @@ import Colors from "../../constants/Colors";
 
 const ProductsOverViewScreen = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isCalled, setIsCalled] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -27,23 +28,23 @@ const ProductsOverViewScreen = (props: any) => {
 
   const loadProducts = useCallback(async () => {
     setError(null);
+    setIsCalled(false);
     setIsRefreshing(true);
     try {
       await dispatch(productsActions.fetchProducts());
     } catch (error) {
       setError(error.message);
     }
+    setIsCalled(true);
     setIsRefreshing(false);
-  }, [dispatch, setIsLoading, setError]);
+  }, [dispatch, setIsLoading, setError, setIsCalled]);
 
   useEffect(() => {
     setIsLoading(true);
-    const willFocus = addListener("focus", loadProducts);
+    const unsubscribe = addListener("focus", loadProducts);
     setIsLoading(false);
-    return () => {
-      willFocus.remove();
-    };
-  }, [loadProducts, addListener]);
+    return unsubscribe;
+  }, [loadProducts, setIsLoading]);
 
   useEffect(() => {
     loadProducts();
@@ -101,7 +102,7 @@ const ProductsOverViewScreen = (props: any) => {
     );
   }
 
-  if (!isLoading && products.length === 0) {
+  if (!isLoading && products.length === 0 && isCalled) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontSize: 18, fontFamily: "bold" }}>

@@ -6,7 +6,8 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = () => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
+    const userId = getState().auth.userId;
     try {
       const res = await fetch(
         "https://my-shop-f8710-default-rtdb.firebaseio.com/products.json"
@@ -28,7 +29,11 @@ export const fetchProducts = () => {
           )
         );
       }
-      dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+      dispatch({
+        type: SET_PRODUCTS,
+        products: loadedProducts,
+        userProducts: loadedProducts.filter((prod) => prod.ownerId === userId),
+      });
     } catch (error) {
       throw error;
     }
@@ -60,6 +65,7 @@ export const createProduct = (
   price: number
 ) => {
   return async (dispatch: any, getState: any) => {
+    const userId = getState().auth.userId;
     const token = getState().auth.token;
     const res = await fetch(
       `https://my-shop-f8710-default-rtdb.firebaseio.com/products.json?auth=${token}`,
@@ -73,6 +79,7 @@ export const createProduct = (
           description,
           imageUrl,
           price,
+          ownerId: userId,
         }),
       }
     );
@@ -87,6 +94,7 @@ export const createProduct = (
         description,
         imageUrl,
         price,
+        ownerId: userId,
       },
     });
   };
