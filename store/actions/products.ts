@@ -36,9 +36,10 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (productId: string) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
+    const token = getState().auth.token;
     const res = await fetch(
-      `https://my-shop-f8710-default-rtdb.firebaseio.com/products/${productId}.json`,
+      `https://my-shop-f8710-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
@@ -58,9 +59,10 @@ export const createProduct = (
   imageUrl: string,
   price: number
 ) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
+    const token = getState().auth.token;
     const res = await fetch(
-      "https://my-shop-f8710-default-rtdb.firebaseio.com/products.json",
+      `https://my-shop-f8710-default-rtdb.firebaseio.com/products.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -95,9 +97,10 @@ export const updateProduct = (
   description: string,
   imageUrl: string
 ) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
+    const token = getState().auth.token;
     const res = await fetch(
-      `https://my-shop-f8710-default-rtdb.firebaseio.com/products/${id}.json`,
+      `https://my-shop-f8710-default-rtdb.firebaseio.com/products/${id}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {

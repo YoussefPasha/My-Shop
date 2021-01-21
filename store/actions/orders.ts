@@ -32,10 +32,11 @@ export const fetchOrders = () => {
 };
 
 export const addOrder = (cartItems: any, totalAmount: number) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
+    const token = getState().auth.token;
     const date = new Date();
     const res = await fetch(
-      "https://my-shop-f8710-default-rtdb.firebaseio.com/orders/u1.json",
+      `https://my-shop-f8710-default-rtdb.firebaseio.com/orders/u1.json?auth=${token}`,
       {
         method: "POST",
         headers: {
