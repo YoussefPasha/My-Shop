@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Alert, FlatList, Platform } from "react-native";
+import { Alert, FlatList, Platform, Text, View } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
 import { HeaderButtonCmp, MainButton, ProductItem } from "../../components";
@@ -50,6 +50,16 @@ const UserProductsScreen = (props: any) => {
       },
     ]);
   };
+
+  if (userProducts.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 18, fontFamily: "bold" }}>
+          No Products found. Maybe start adding some!
+        </Text>
+      </View>
+    );
+  }
 
   const editProductHandler = (id: string) => {
     navigate("EditProduct", { productId: id });
