@@ -1,5 +1,6 @@
-import React from "react";
-import { Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-community/async-storage";
+import { ActivityIndicator, Platform, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StatusBar } from "expo-status-bar";
@@ -14,7 +15,8 @@ import { Ionicons } from "@expo/vector-icons";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
 import AuthScreen from "../screens/user/AuthScreen";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import * as authActions from "../store/actions/auth";
 
 const fonts = {
   regular: require("../assets/fonts/OpenSans-Regular.ttf"),
@@ -144,7 +146,38 @@ const ShopNavigator = () => {
 const MainStackNavigator = createStackNavigator();
 
 const MainNavigator = () => {
-  const userState = useSelector((state: any) => state.auth.token);
+  const [isLoading, setIsLoading] = useState(false);
+  let userState: any = useSelector((state: any) => state.auth.token);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const tryLogin = async () => {
+      const userData: any = await AsyncStorage.getItem("userData");
+      if (!userData) {
+        return;
+      }
+      const transformedData = JSON.parse(userData);
+      const { token, userId, expiryDate } = transformedData;
+      const expirationDate = new Date(expiryDate);
+      if (expirationDate <= new Date() || !token || !userId) {
+        return;
+      }
+      userState = token;
+      dispatch(authActions.authenticate(userId, token));
+    };
+    setIsLoading(true);
+    tryLogin();
+    setIsLoading(false);
+  }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
   return (
     <LoadAssets {...{ fonts }}>
       <StatusBar animated />
