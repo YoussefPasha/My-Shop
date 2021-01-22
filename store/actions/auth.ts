@@ -2,9 +2,13 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
+let timer: any;
 
-export const authenticate = (userId: any, token: any) => {
-  return { type: AUTH, userId: userId, token: token };
+export const authenticate = (userId: any, token: any, expiryTime: number) => {
+  return (dispatch: any) => {
+    dispatch(setLogoutTimer(expiryTime));
+    dispatch({ type: AUTH, userId: userId, token: token });
+  };
 };
 
 export const signup = (email: string, password: string) => {
@@ -30,9 +34,15 @@ export const signup = (email: string, password: string) => {
     }
     const resData = await res.json();
 
-    dispatch(authenticate(resData.localId, resData.idToken));
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
+    dispatch(
+      authenticate(
+        resData.localId,
+        resData.idToken,
+        parseInt(resData.expiresIn) * 1000
+      )
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
@@ -63,9 +73,15 @@ export const logIn = (email: string, password: string) => {
     }
     const resData = await res.json();
 
-    dispatch(authenticate(resData.localId, resData.idToken));
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
+    dispatch(
+      authenticate(
+        resData.localId,
+        resData.idToken,
+        parseInt(resData.expiresIn) * 1000
+      )
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
@@ -87,5 +103,21 @@ const saveDataToStorage = (
 };
 
 export const logout = () => {
+  clearLogoutTimer();
+  AsyncStorage.removeItem("userData");
   return { type: LOGOUT };
+};
+
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+
+const setLogoutTimer = (expirationTime: number) => {
+  return (dispatch: any) => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime );
+  };
 };
