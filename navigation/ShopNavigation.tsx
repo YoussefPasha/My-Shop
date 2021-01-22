@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 import { ActivityIndicator, Platform, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 import { StatusBar } from "expo-status-bar";
 
 import ProductsOverViewScreen from "../screens/shop/ProductsOverViewScreen";
-import { LoadAssets } from "../components";
+import { LoadAssets, MainButton } from "../components";
 import Colors from "../constants/Colors";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
@@ -90,6 +94,7 @@ const AdminNavigatorCmp = () => {
 };
 
 const ShopNavigator = () => {
+  const dispatch = useDispatch();
   return (
     <ShopDrawer.Navigator
       drawerContentOptions={{
@@ -98,6 +103,23 @@ const ShopNavigator = () => {
           fontFamily: "bold",
           fontSize: 16,
         },
+      }}
+      drawerContent={(props) => {
+        return (
+          <DrawerContentScrollView {...props}>
+            <DrawerItemList {...props} />
+            <View style={{ flex: 1, padding: 20 }}>
+              <MainButton
+                title="Logout"
+                color={Colors.accent}
+                font="bold"
+                onPress={() => {
+                  dispatch(authActions.logout());
+                }}
+              />
+            </View>
+          </DrawerContentScrollView>
+        );
       }}
     >
       <ShopDrawer.Screen

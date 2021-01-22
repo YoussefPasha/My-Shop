@@ -11,7 +11,7 @@ const MainButton = (props: any) => {
         color: props.color ? props.color : Colors.primary,
         fontSize: 16,
         fontWeight: "600",
-        fontFamily: "regular",
+        fontFamily: !props.font ? "regular" : props.font,
       }}
       onPress={props.onPress}
     />
